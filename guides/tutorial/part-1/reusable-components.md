@@ -1,20 +1,18 @@
-<!-- Heads up! This is a generated file, do not edit directly. You can find the source at https://github.com/ember-learn/super-rentals-tutorial/blob/master/src/markdown/tutorial/part-1/07-reusable-components.md -->
+La dernière fonctionnalité manquante au composant `<Rental>` est la carte pour montrer l'adresse de la location, c'est ce sur quoi nous allons travailler maintenant&nbsp;:
 
-The last missing feature for the `<Rental>` component is a map to show the location of the rental, which is what we're going to work on next:
+<img src="/images/tutorial/part-1/reusable-components/three-old-mansions@2x.png" alt="L'app Super Rentals à la fin du chapitre" width="1024" height="1129" />
 
-<img src="/images/tutorial/part-1/reusable-components/three-old-mansions@2x.png" alt="The Super Rentals app by the end of the chapter" width="1024" height="1129">
+En ajoutant la carte, vous apprendrez à&nbsp;:
 
-While adding the map, you will learn about:
+- Gérer les configurations à l'échelle de l'app
+- Paramétrer des composants avec des arguments
+- Accéder aux arguments d'un composant
+- Interpoler des valeurs dans les _templates_
+- Surcharger des attributs HTML avec `...attributes`
+- Refactorer avec des _getters_ et l'_auto-track_
+- Récupérer des valeurs JavaScript dans le contexte d'un test
 
-- Managing application-level configurations
-- Parameterizing components with arguments
-- Accessing component arguments
-- Interpolating values in templates
-- Overriding HTML attributes in `...attributes`
-- Refactoring with getters and auto-track
-- Getting JavaScript values into the test context
-
-## Managing Application-level Configurations
+## Gérer les configurations à l'échelle de l'app
 
 We will use the [Mapbox](https://www.mapbox.com) API to generate maps for our rental properties. You can [sign up](https://www.mapbox.com/signup/) for free and without a credit card.
 
@@ -104,7 +102,7 @@ building...
 Build successful (13286ms) – Serving on http://localhost:4200/
 ```
 
-## Generating a Component with a Component Class
+## Générer un composant avec une classe de composant
 
 With the Mapbox API key in place, let's generate a new component for our map.
 
@@ -133,7 +131,7 @@ However, in the case of our `<Map>` component, we are pretty sure that we are go
   </div>
 </div>
 
-## Parameterizing Components with Arguments
+## Paramétrer des composants avec des arguments
 
 Let's start with our JavaScript file:
 
@@ -151,7 +149,7 @@ export default class MapComponent extends Component {
 
 Here, we import the access token from the config file and return it from a `token` _[getter](https://javascript.info/property-accessors)_. This allows us to access our token as `this.token` both inside the `MapComponent` class body, as well as the component's template. It is also important to [URL-encode](https://javascript.info/url#encoding-strings) the token, just in case it contains any special characters that are not URL-safe.
 
-## Interpolating Values in Templates
+## Interpoler des valeurs dans les _templates_
 
 Now, let's move from the JavaScript file to the template:
 
@@ -177,7 +175,7 @@ By _parameterizing_ our component using arguments, we made a reusable component 
 
 We supplied a reasonable default value for the `alt` attribute based on the values of the `@lat` and `@lng` arguments. You may notice that we are directly _interpolating_ values into the `alt` attribute's value. Ember will automatically concatenate these interpolated values into a final string value for us, including doing any necessary HTML-escaping.
 
-## Overriding HTML Attributes in `...attributes`
+## Surcharger des attributs HTML avec `...attributes`
 
 Next, we used `...attributes` to allow the invoker to further customize the `<img>` tag, such as passing extra attributes such as `class`, as well as _overriding_ our default `alt` attribute with a more specific or human-friendly one.
 
@@ -293,7 +291,7 @@ Note that the `hasAttribute` test helper from [`qunit-dom`](https://github.com/s
 
 _Fingers crossed..._ Let's run our tests.
 
-<img src="/images/tutorial/part-1/reusable-components/pass@2x.png" alt="Tests passing with the new &lt;Map&gt; tests" width="1024" height="768">
+<img src="/images/tutorial/part-1/reusable-components/pass@2x.png" alt="Tests passing with the new &lt;Map&gt; tests" width="1024" height="768" />
 
 Hey, all the tests passed! But does that mean it actually works in practice? Let's find out by invoking the `<Map>` component from the `<Rental>` component's template:
 
@@ -306,16 +304,16 @@ Hey, all the tests passed! But does that mean it actually works in practice? Let
   <div class="details">
     <h3>Grand Old Mansion</h3>
     <div class="detail owner">
-      <span>Owner:</span> Veruca Salt
+      <span>Propriétaire :</span> Veruca Salt
     </div>
     <div class="detail type">
       <span>Type:</span> Standalone
     </div>
     <div class="detail location">
-      <span>Location:</span> San Francisco
+      <span>Adresse :</span> San Francisco
     </div>
     <div class="detail bedrooms">
-      <span>Number of bedrooms:</span> 15
+      <span>Nombre de chambres :</span> 15
     </div>
   </div>
   <Map
@@ -331,7 +329,7 @@ Hey, all the tests passed! But does that mean it actually works in practice? Let
 
 Hey! That's a map!
 
-<img src="/images/tutorial/part-1/reusable-components/three-old-mansions@2x.png" alt="Three Grand Old Mansions" width="1024" height="1129">
+<img src="/images/tutorial/part-1/reusable-components/three-old-mansions@2x.png" alt="Three Grand Old Mansions" width="1024" height="1129" />
 
 <!-- TODO: https://github.com/ember-cli/ember-cli/issues/8782 -->
 
@@ -373,7 +371,7 @@ module('Integration | Component | rental', function (hooks) {
 });
 ```
 
-## Refactoring with Getters and Auto-track
+## Refactorer avec des _getters_ et l'_auto-track_
 
 At this point, a big part of our `<Map>` template is devoted to the `<img>` tag's `src` attribute, which is getting pretty long. One alternative is to move this computation into the JavaScript class instead.
 
@@ -428,7 +426,7 @@ export default class MapComponent extends Component {
 
 Much nicer! And all of our tests still pass!
 
-<img src="/images/tutorial/part-1/reusable-components/pass-2@2x.png" alt="Tests passing after the src getter refactor" width="1024" height="768">
+<img src="/images/tutorial/part-1/reusable-components/pass-2@2x.png" alt="Tests passing after the src getter refactor" width="1024" height="768" />
 
 Note that we did not mark our getter as `@tracked`. Unlike instance variables, getters cannot be "assigned" a new value directly, so it does not make sense for Ember to monitor them for changes.
 
@@ -436,7 +434,7 @@ That being said, the values _produced_ by getters can certainly change. In our c
 
 Ember does this by automatically tracking any variables that were accessed while computing a getter's value. As long as the dependencies themselves are marked as `@tracked`, Ember knows exactly when to invalidate and re-render any templates that may potentially contain any "stale" and outdated getter values. This feature is also known as _[auto-track](../../../in-depth-topics/autotracking-in-depth/)_. All arguments that can be accessed from `this.args` (in other words, `this.args.*`) are implicitly marked as `@tracked` by the Glimmer component superclass. Since we inherited from that superclass, everything Just Works™.
 
-## Getting JavaScript Values into the Test Context
+## Récupérer des valeurs JavaScript dans le contexte d'un test
 
 Just to be sure, we can add a test for this behavior:
 
@@ -594,4 +592,4 @@ Instead, `this` refers to a special _test context_ object, which we have access 
 
 With all our tests passing, we are ready to move on!
 
-<img src="/images/tutorial/part-1/reusable-components/pass-3@2x.png" alt="All our tests are passing" width="1024" height="768">
+<img src="/images/tutorial/part-1/reusable-components/pass-3@2x.png" alt="All our tests are passing" width="1024" height="768" />
